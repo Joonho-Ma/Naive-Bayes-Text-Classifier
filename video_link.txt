@@ -4,13 +4,12 @@ Video Presentation Submission & Language Declaration
 ======================================================================
 
 Student Information:
-- Full Name: [Replace with your Full Name]
-- UIN: [Replace with your 9-digit UIN]
-- NetID: [Replace with your UIC NetID]
+- Full Name: Joonho Ma
+- UIN: 659772136
+- NetID: jma1961
 
 Data Source (if any): 
-- Source 1: [Replace with your data source (if any)]
-- Source 2: [Replace with your data source (if any)]
+- Source 1: https://archive.ics.uci.edu/dataset/331/sentiment+labelled+sentences
 
 Video Presentation Details:
 - Video URL: [Paste your accessible YouTube / Google Drive / Dropbox link here]
@@ -18,8 +17,8 @@ Video Presentation Details:
 - Video File Format: .mp4 (or standard streamable link)
 
 Language Declaration:
-- Language Used in Dataset & Classifier: [e.g., English / Spanish / Burmese / Hindi / Chinese / etc.]
-- Applying for +30% Non-English Language Bonus: [YES / NO]
+- Language Used in Dataset & Classifier: English
+- Applying for +30% Non-English Language Bonus: NO
   (Note: If YES, book your 5-question interview at: https://calendar.app.google/J5EejvwkKgtPE8oKA)
 
 Verification Checklist:
