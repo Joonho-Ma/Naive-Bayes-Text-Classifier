@@ -1,3 +1,4 @@
+
 """
 UIC CS 411 - Project 03: Naive Bayes Text Classifier from Scratch
 """
@@ -17,6 +18,7 @@ train_model(train_file="data/train.csv")
 6. store the result to the train_result dictionary
 """
 train_result = {} # empty dictionary to store trained result
+
 
 def train_model(train_file="data/train.csv"):
     """Train the Naive Bayes classifier on the training dataset."""
@@ -43,15 +45,14 @@ def train_model(train_file="data/train.csv"):
             text = re.sub(r"n't\b", " not", text)
 
             # remove possessive "'s", apostrophes
-            text = re.sub(r"'s\b", "", text) 
+            text = re.sub(r"'s\b", "", text)
             text = text.replace("'", "")
 
-            
             # Then, extract word tokens
-            tokens = re.findall(r"[a-z0-9]+", text) 
+            tokens = re.findall(r"[a-z0-9]+", text)
 
             class_counts[label] += 1 # count sentences and word occurrences
-            
+
             # Bag-of-Words: ignore order, count repeated words
             for word in tokens:
                 vocabulary.add(word)
@@ -86,9 +87,7 @@ def train_model(train_file="data/train.csv"):
     return train_result
 
 
-
-
-def predict(text):
+def predict(text, show_scores=False):
     """
     Predict sentiment class for an input sentence.
     Returns: 'positive' or 'negative'
@@ -117,12 +116,19 @@ def predict(text):
     scores = {"positive": math.log(class_priors["positive"]),
               "negative": math.log(class_priors["negative"])
               }
-    
+
     # 3. Add log likelihood for each known token
     for each_word in tokens:
         if each_word in vocabulary:
             for label in scores:
                 scores[label] += math.log(word_probabilities[label][each_word])
+
+    # Presentation: display tokens and log scores
+    if show_scores:
+        print("Tokens:", tokens)
+        print("Ignored words:", [word for word in tokens if word not in vocabulary])
+        print(f"Positive log score: {scores['positive']:.6f}")
+        print(f"Negative log score: {scores['negative']:.6f}")
 
     # 4. Compare scores and return the higher-scoring class
     if scores["positive"] > scores["negative"]:
@@ -133,7 +139,7 @@ def predict(text):
     # (Tie-breaking): when scores are the same, then compare class priors, then default to positive
     if class_priors["positive"] >= class_priors["negative"]:
         return "positive"
-    return "negative"   
+    return "negative"
 
 
 def evaluate_model(test_file="data/test.csv"):
@@ -185,6 +191,7 @@ def evaluate_model(test_file="data/test.csv"):
 
     return result_dict
 
+
 if __name__ == "__main__":
     train_model()
     # Evaluation call added
@@ -192,6 +199,22 @@ if __name__ == "__main__":
 
     print("Accuracy:", result["accuracy"])
     print("Confusion Matrix:", result["confusion_matrix"])
+
+    # training statistics and word likelihood calculations for presentation
+    print("\n--- Training Statistics ---")
+    print("Vocabulary size:", len(train_result["vocabulary"]))
+    for label in ("positive", "negative"):
+        print(f"{label}: sentences={train_result['class_counts'][label]}, "
+              f"total words={train_result['total_words'][label]}, "
+              f"prior={train_result['priors'][label]:.6f}")
+
+    for word in ("great", "not"):
+        print(f"\nWord: {word}")
+        for label in ("positive", "negative"):
+            count = train_result["word_counts"][label].get(word, 0)
+            denominator = train_result["total_words"][label] + len(train_result["vocabulary"])
+            probability = train_result["word_probabilities"][label].get(word)
+            print(f"{label}: count={count}, P=({count}+1)/{denominator}={probability:.6f}")
 
     # Interactive prediction loop
     print("Type 'exit' to quit.")
@@ -207,5 +230,5 @@ if __name__ == "__main__":
         if not text.strip():
             continue
 
-        prediction = predict(text)
+        prediction = predict(text, show_scores=True)
         print("Prediction:", prediction)
